@@ -1,0 +1,5 @@
+<ul id="contentList">
+	{% for content in contents %}
+	<li><a href="{% url "content" content.id %}">{{ content.title }}</a></li>
+	{% endfor %}
+</ul>

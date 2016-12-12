@@ -1,0 +1,23 @@
+<div>
+	<div class="title">
+		<h1>{{ contentToDisplay.title }}</h1>
+	</div>
+	<div class="description">
+		<h2>Description</h2>
+		<div class="descriptionContent">
+			{{ contentToDisplay.description|safe }}
+		</div>
+	</div>
+	<div class="challenge">
+		<h2>Challenges</h2>
+		<div class="challengeContent">
+			{{ contentToDisplay.challenges|safe }}
+		</div>
+	</div>
+	<div class="competence">
+		<h2>Acquired Competences</h2>
+		<div class="competenceContent">
+			{{ contentToDisplay.acquiredCompetences|safe }}
+		</div>
+	</div>
+</div>
