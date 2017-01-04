@@ -1,23 +1,36 @@
+{% load static %}
 <div>
-	<div class="title">
-		<h1>{{ contentToDisplay.title }}</h1>
+	<div class="articleTitle">{{ contentToDisplay.title }}</div>
+	{% for section in sections %}
+	<div class="section">
+		<div class="sectionTitle">{{ section.title }}</div>
+		<div class="sectionContent">{{ section.content }}</div>
 	</div>
-	<div class="description">
-		<h2>Description</h2>
-		<div class="descriptionContent">
-			{{ contentToDisplay.description|safe }}
+	{% endfor %}
+
+	{% if imageCount > 0 %}
+	<div class="gallery">
+		<div class="galleryTitle">Gallery</div>
+		<div class="galleryImages">
+			{% for image in images %}
+				{% with imgUrl="Images/"|add:image.imageName %}
+				<img src="{% static imgUrl %}" alt="{{ imgUrl }}" title="{{ image.title }}" width="100" height="100"/>
+				{% endwith %}
+			{% endfor %}
 		</div>
 	</div>
-	<div class="challenge">
-		<h2>Challenges</h2>
-		<div class="challengeContent">
-			{{ contentToDisplay.challenges|safe }}
+	{% endif %}
+
+	{% if docCount > 0 %}
+	<div class="documents">
+		<div class="documentsTitle">Documents</div>
+		<div class="documentsList">
+			{% for doc in documents %}
+				{% with docUrl="Documents/"|add:doc.docName %}
+				<embed class="documentView" src="{% static docUrl %}" alt="{{ doc.title }}" width="300" height="200"/>
+				{% endwith %}
+			{% endfor %}
 		</div>
 	</div>
-	<div class="competence">
-		<h2>Acquired Competences</h2>
-		<div class="competenceContent">
-			{{ contentToDisplay.acquiredCompetences|safe }}
-		</div>
-	</div>
+	{% endif %}
 </div>
