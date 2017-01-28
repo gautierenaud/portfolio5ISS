@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>GAUTIER Renaud Tamon Portfolio</title>
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="{% static "css/navbar.css" %}" />
+		<link rel="stylesheet" href="{% static "css/cards.css" %}" />
+		<link rel="stylesheet" href="{% static "css/mainPage.css" %}" />
+
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{% static "js/mainPage.js" %}"></script>
+	</head>
+	<body onload="initEverything()">
+		<div class="row affix-row">
+			<div class="col-sm-3 col-md-2 affix-sidebar input-block-level">
+				<div class="sidebar-nav">
+					<div class="navbar navbar-default" role="navigation">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+								<span class="sr-only">5ISS Portfolio menu</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<span class="visible-xs navbar-brand">5ISS Portfolio menu</span>
+						</div>
+						<div class="navbar-collapse collapse sidebar-navbar-collapse">
+							<ul class="nav navbar-nav" id="sidenav">
+								<li>
+									<a href="#" data-toggle="collapse" data-target="#subProfile" data-parent="#sidenav" class="collapsed">
+										<h4>
+											Portfolio 5ISS
+											<br>
+											<small>GAUTIER Renaud Tamon<span class="caret"></span></small>
+										</h4>
+									</a>
+									<div class="collapse" id="subProfile" style="height: 0px;">
+										<ul class="nav nav-list" id="ulProfile">
+											<li>
+												<a href="{% static "doc/CV_GAUTIER_Renaud.pdf" %}" target="_blank"><img class="profileIcon" src="{% static "img/curriculum.png" %}"/>Resume</a>
+											</li>
+											<li>
+												<a href="#"><img class="profileIcon" src="{% static "img/letter.png" %}"/>gautierenaud@gmail.com</a>
+											</li>
+											<li>
+												<a href="https://github.com/gautierenaud" target="_blank"><img class="profileIcon" src="{% static "img/github.png" %}"/>Github</a>
+											</li>
+											<li>
+												<a href="https://fr.linkedin.com/in/gautier-renaud-tamon-a3b60891" target="_blank"><img class="profileIcon" src="{% static "img/linkedin-button.png" %}"/>Linkedin</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</div><!--/.nav-collapse -->
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-9 col-md-10 affix-content">
+				<div class="container" id="contentHolder">
+					<!-- content will be inserted here by script -->
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

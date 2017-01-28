@@ -16,9 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from contentDisplayer import views
-
+from mainPage import views
+from django.views.generic import RedirectView
 
 urlpatterns = [
 	url(r'^contentInstance/', include('contentDisplayer.urls')),
 	url(r'^admin/', include(admin.site.urls)),
+	url(r'^index', include('mainPage.urls')),
+	url(r'^.*', RedirectView.as_view(url="/index")),
 ]

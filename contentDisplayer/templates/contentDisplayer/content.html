@@ -1,36 +1,163 @@
 {% load static %}
-<div>
-	<div class="articleTitle">{{ contentToDisplay.title }}</div>
-	{% for section in sections %}
-	<div class="section">
-		<div class="sectionTitle">{{ section.title }}</div>
-		<div class="sectionContent">{{ section.content }}</div>
-	</div>
-	{% endfor %}
+{% load content_extras %}
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">{{ article.title }}</span>
 
-	{% if imageCount > 0 %}
-	<div class="gallery">
-		<div class="galleryTitle">Gallery</div>
-		<div class="galleryImages">
-			{% for image in images %}
+		<div class="tags">
+			<div class="sectionTitle">Tags</div>
+			<div class="card-action">
+				{% for tag in tags %}
+				<button type="button" class="btn btn-info" onclick="retrieveTagInfo({{ tag.id }})">{{ tag.name }}</button>
+				{% endfor %}
+			</div>
+		</div>
+
+		{% for section in sections %}
+		<div class="section">
+			<div class="sectionTitle">{{ section.title }}</div>
+			<div class="sectionContent">{{ section.content|safe }}</div>
+		</div>
+		{% endfor %}
+
+		<!-- Competence matrix -->
+		{% if article.isUF %}
+		<div class="ufCompetences">
+			<div class="sectionTitle">Competence Matrix</div>
+			<div class="sectionContent">The required competences for this unit are the following :</div>
+			<div class="ufCompetenceMatrix">
+				<table class="table">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Course</th>
+							<th>Competence</th>
+							<th>Acquired in</th>
+							<th>Required</th>
+							<th>Achieved</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for competence in ufCompetences %}
+						<tr>
+							<th scope="row"><a href="#" onclick="retrieveContentInfo('{{ competence.targetUF.id }}')">{{ competence.targetUF.title }}</a></th>
+							<td>{{ competence.title }}</td>
+							<td>
+								{% with competence|acquiredUF as articleList %}
+								{% if articleList|length > 1 %}
+								<div class="btn-group">
+									<button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+										{{ articleList.0.title }}
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										{% for ufArticle in articleList %}
+										<li><a href="#" onclick="retrieveContentInfo('{{ ufArticle.id }}')">{{ ufArticle.title }}</a></li>
+										{% endfor %}
+									</ul>
+								</div>								{% else %}
+								<a href="#" onclick="retrieveContentInfo('{{ articleList.0.id }}')">{{ articleList.0.title }}</a>
+								{% endif %}
+								{% endwith %}
+							</td>
+							<td class="text-right level{{ competence.expectedLevel }}" data-toggle="tooltip" title="{{ competence.expectedLevel|lvlTag }}">{{ competence.expectedLevel }}</td>
+							<td class="text-right level{{ competence.level }}" data-toggle="tooltip" title="{{ competence.level|lvlTag }}">{{ competence.level }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% else %}
+		{% with article|acquiredCompetences as competenceList %}
+		{% if competenceList|length > 0%}
+		<div class="topicCompetences">
+			<div class="sectionTitle">Acquired Competences</div>
+			<div class="sectionContent"></div>
+			<div class="ufCompetenceMatrix">
+				<table class="table">
+					<thead class="thead-inverse">
+						<tr>
+							<th>From</th>
+							<th>Competence</th>
+							<th>Required</th>
+							<th>Achieved</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for competence in competenceList %}
+						<tr>
+							<td><a href="#" onclick="retrieveContentInfo('{{ competence.targetUF.id }}')">{{ competence.targetUF.title }}</a></td>
+							<td>{{ competence.title }}</td>
+							<td class="text-right level{{ competence.expectedLevel }}" data-toggle="tooltip" title="{{ competence.expectedLevel|lvlTag }}">{{ competence.expectedLevel }}</td>
+							<td class="text-right level{{ competence.level }}" data-toggle="tooltip" title="{{ competence.level|lvlTag }}">{{ competence.level }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
+		{% endwith %}
+		{% endif %}
+
+		{% if imageCount > 0 %}
+		<div class="sectionTitle">Gallery</div>
+		<div class="gallery carousel slide sectionContent" id="imageGallery">
+			<!-- Indicators -->
+			{% if imageCount > 1%}
+			<ol class="carousel-indicators">
+				{% for image in images %}
+				<li data-target="#imageGallery" data-slide-to="{{ forloop.counter0 }}"{% if forloop.counter0 == 0 %} class="active"{% endif %}></li>
+				{% endfor %}
+			</ol>
+			{% endif %}
+
+			<div class="carousel-inner" role="listbox">
+				{% for image in images %}
 				{% with imgUrl="Images/"|add:image.imageName %}
-				<img src="{% static imgUrl %}" alt="{{ imgUrl }}" title="{{ image.title }}" width="100" height="100"/>
+				<div class="item {% if forloop.counter0 == 0 %}active{% endif %}">
+					<img src="{% static imgUrl %}" alt="{{ image.title }}">
+					<div class="carousel-caption">
+						<p>{{ image.title }}</p>
+					</div>
+				</div>
 				{% endwith %}
-			{% endfor %}
-		</div>
-	</div>
-	{% endif %}
+				{% endfor %}
+			</div>
 
-	{% if docCount > 0 %}
-	<div class="documents">
-		<div class="documentsTitle">Documents</div>
-		<div class="documentsList">
-			{% for doc in documents %}
-				{% with docUrl="Documents/"|add:doc.docName %}
-				<embed class="documentView" src="{% static docUrl %}" alt="{{ doc.title }}" width="300" height="200"/>
-				{% endwith %}
-			{% endfor %}
+			{% if imageCount > 1 %}
+			<!-- Left and right controls -->
+			<a class="left carousel-control" href="#imageGallery" role="button" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				<span class="sr-only">Previous</span>
+			</a>
+			<a class="right carousel-control" href="#imageGallery" role="button" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				<span class="sr-only">Next</span>
+			</a>
+			{% endif %}
 		</div>
+		{% endif %}
+
+		{% if docCount > 0 %}
+		<div class="documents">
+			<div class="sectionTitle">Documents</div>
+			<div class="documentsList sectionContent">
+				{% for doc in documents %}
+				{% with docUrl="Documents/"|add:doc.docName %}
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						{{ doc.title }}
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<li><a href="{% static docUrl %}" download>Download</a></li>
+						<li><a href="{% static docUrl %}" target="_blank">Open in new tab</a></li>
+					</ul>
+				</div>
+				{% endwith %}
+				{% endfor %}
+			</div>
+		</div>
+		{% endif %}
 	</div>
-	{% endif %}
 </div>

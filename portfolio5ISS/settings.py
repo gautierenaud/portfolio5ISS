@@ -26,6 +26,7 @@ SECRET_KEY = '52kj0s#x9ttjmcsb4rx@vt^&#$$0as&=cq8c8c6ate5l+^9pvs'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = [u'10.32.1.139']
 
 
 # Application definition
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'contentDisplayer',
+	'mainPage',
+	'mptt'
 ]
 
 MIDDLEWARE = [

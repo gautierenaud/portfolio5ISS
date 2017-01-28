@@ -1,0 +1,20 @@
+{% load content_extras %}
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Articles related to <button type="button" class="btn btn-info">{{ tag.name }}</button></span>
+		<div class="articleList">
+			{% for article in articles %}
+			<div class="card">
+				<div class="card-content">
+					<a class="articleLink" href="#" onclick="retrieveContentInfo({{ article.id }})">{{ article.title }}</a>
+					, Tags : 
+					
+					{% for linkedTag in article|getAllTags %}
+					<button type="button" class="btn btn-info" onclick="retrieveTagInfo({{ linkedTag.id }})">{{ linkedTag.name }}</button>
+					{% endfor %}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>

@@ -1,5 +1,18 @@
-<ul id="contentList">
-	{% for content in contents %}
-	<li><a href="{% url "content" content.id %}">{{ content.title }}</a></li>
-	{% endfor %}
-</ul>
+{% load mptt_tags %}
+{% recursetree nodes %}
+<li>
+	<a href="#" onclick="retrieveContentInfo('{{ node.id }}')" data-toggle="collapse" data-target="#sub{{node.id}}" data-parent="#ul{{node.parent.id}}"><small>{{ node.title }}
+	{% if not node.is_leaf_node %}
+		<span class="caret"></span>
+	{% endif %}
+		</small>
+	</a>
+	{% if not node.is_leaf_node %}
+	<div class="collapse" id="sub{{node.id}}" style="height: 0px;">
+		<ul class="nav nav-list" id="ul{{node.id}}">
+			{{ children }}
+		</ul>
+	</div>
+	{% endif %}
+</li>
+{% endrecursetree %}
