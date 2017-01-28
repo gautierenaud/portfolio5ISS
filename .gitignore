@@ -1,0 +1,9 @@
+# python files
+*.pyc
+
+# swap file
+*.sw*
+
+# db migrations
+
+*/migrations/
