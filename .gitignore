@@ -1,6 +1,11 @@
 # python files
 *.pyc
 
+# artifacts
+venv
+staticfiles
+.env
+
 # swap file
 *.sw*
 
